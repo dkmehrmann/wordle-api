@@ -38,16 +38,16 @@ def game(game_id):
         return jsonify(TABLE[game_id])
     elif request.method == 'POST':
         if len(TABLE[game_id]) == 5:
-            return jsonify('game over! no more guesses allowed.')
+            return jsonify('game over! no more guesses allowed. you can start a new game at /start')
         guess = request.form.get('guess')
         if not guess:
-            return jsonify('guess not received. remember to send guess=<your guess> as form data')
+            return jsonify('guess not received. remember to send guess=<your guess> as a key value pair')
         if len(guess) != 5:
             return jsonify('Guess should be 5 letters. Try again!')
         if '_' in guess:
             return jsonify('no underscores in guess')
         else:
-            commit_guess(guess, ANS, game_id, TABLE)
+            commit_guess(guess.lower(), ANS, game_id, TABLE)
 
         if TABLE[game_id][-1] == ['Y', 'Y', 'Y', 'Y', 'Y']:
             return jsonify(f'winner! {guess} was correct. issue a GET request to see your final score')
